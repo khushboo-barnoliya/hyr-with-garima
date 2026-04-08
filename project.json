@@ -1,0 +1,25 @@
+{
+  "overview": "HYR with Garima is a full-featured fitness and body transformation studio platform. It features a transformation gallery with before-and-after sliders, a booking calendar for personalized training sessions, a nutrition hub with macro tracking and meal plans, a member progress portal with measurement logging and charts, and a powerful admin dashboard for managing members, plans, and content.",
+  "features": [
+    "Transformation gallery with before/after sliders",
+    "Booking calendar for personalized training sessions",
+    "Success stories section with client testimonials",
+    "Nutrition hub with macro tracking and meal plans",
+    "Member progress portal with body measurement logs and charts",
+    "Admin dashboard to manage members, plans, and content",
+    "Role-based access: member and admin roles",
+    "Downloadable recipe guides by fitness goal"
+  ],
+  "category": "health-fitness",
+  "tags": [
+    "fitness",
+    "transformation",
+    "nutrition",
+    "booking",
+    "member-portal",
+    "admin",
+    "progress-tracking",
+    "meal-plans"
+  ],
+  "last_updated": "2026-04-07T19:24:32.996Z"
+}

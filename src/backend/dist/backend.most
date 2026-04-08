@@ -1,0 +1,219 @@
+// Version: 1.0.0
+type BodyMeasurement__876533361 =
+  {
+    armsCm : Float;
+    chestCm : Float;
+    date : Timestamp__301639476;
+    hipsCm : Float;
+    id : MeasurementId__640775542;
+    legsCm : Float;
+    loggedAt : Timestamp__301639476;
+    memberId : UserId__158757552;
+    notes : Text;
+    waistCm : Float;
+    weightKg : Float
+  };
+type BookingId__892708521 = Id__389469852;
+type BookingStatus__10176221 = {#cancelled; #confirmed};
+type Booking__628731632 =
+  {
+    bookedAt : Timestamp__301639476;
+    id : BookingId__892708521;
+    memberId : UserId__158757552;
+    sessionId : SessionId__1043438039;
+    status : BookingStatus__10176221
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type ExternalBlob__246066408 = Blob;
+type FitnessPlanId__79770597 = Id__389469852;
+type FitnessPlan__1057734907 =
+  {
+    createdAt : Timestamp__301639476;
+    description : Text;
+    durationDays : Nat;
+    id : FitnessPlanId__79770597;
+    name : Text;
+    price : Float
+  };
+type GoalType__716258562 =
+  {#endurance; #maintenance; #muscleGain; #weightLoss};
+type Id__389469852 = Nat;
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type MacroLogId__576093746 = Id__389469852;
+type MacroLog__807488697 =
+  {
+    calories : Nat;
+    carbsGrams : Nat;
+    date : Timestamp__301639476;
+    fatGrams : Nat;
+    id : MacroLogId__576093746;
+    loggedAt : Timestamp__301639476;
+    memberId : UserId__158757552;
+    notes : Text;
+    proteinGrams : Nat
+  };
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type MealPlanId__195733767 = Id__389469852;
+type MealPlan__1048384226 =
+  {
+    carbsGrams : Nat;
+    createdAt : Timestamp__301639476;
+    dailyCalories : Nat;
+    description : Text;
+    fatGrams : Nat;
+    goalType : GoalType__716258562;
+    id : MealPlanId__195733767;
+    name : Text;
+    proteinGrams : Nat
+  };
+type MeasurementId__640775542 = Id__389469852;
+type MemberPlanAssignment__292628342 =
+  {
+    assignedAt : Timestamp__301639476;
+    expiresAt : ?Timestamp__301639476;
+    memberId : UserId__158757552;
+    planId : FitnessPlanId__79770597
+  };
+type MemberProfile__307885204 =
+  {
+    assignedMealPlanId : ?MealPlanId__195733767;
+    email : Text;
+    id : UserId__158757552;
+    joinedAt : Timestamp__301639476;
+    name : Text
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type RecipeGuideId__569619552 = Id__389469852;
+type RecipeGuide__126054300 =
+  {
+    createdAt : Timestamp__301639476;
+    description : Text;
+    file : ExternalBlob__246066408;
+    filename : Text;
+    goalType : GoalType__716258562;
+    id : RecipeGuideId__569619552;
+    title : Text
+  };
+type SessionId__1043438039 = Id__389469852;
+type TestimonialId__312021263 = Id__389469852;
+type Testimonial__1017493778 =
+  {
+    clientName : Text;
+    content : Text;
+    createdAt : Timestamp__301639476;
+    id : TestimonialId__312021263;
+    rating : Nat
+  };
+type Timestamp__301639476 = Int;
+type TrainingSession__215556725 =
+  {
+    bookedCount : Nat;
+    capacity : Nat;
+    description : Text;
+    endTime : Timestamp__301639476;
+    id : SessionId__1043438039;
+    startTime : Timestamp__301639476;
+    title : Text
+  };
+type TransformationId__624338395 = Id__389469852;
+type Transformation__460846123 =
+  {
+    afterImage : ExternalBlob__246066408;
+    beforeImage : ExternalBlob__246066408;
+    clientName : Text;
+    createdAt : Timestamp__301639476;
+    description : Text;
+    id : TransformationId__624338395
+  };
+type UserId__158757552 = Principal;
+type UserRole__1054455867 = {#admin; #guest; #user};
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1054455867>
+    };
+  stable bookings :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Booking__628731632]];
+      var elementIndex : Nat__490723111
+    };
+  stable fitnessPlans :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?FitnessPlan__1057734907]];
+      var elementIndex : Nat__490723111
+    };
+  stable macroLogs :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?MacroLog__807488697]];
+      var elementIndex : Nat__490723111
+    };
+  stable mealPlans :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?MealPlan__1048384226]];
+      var elementIndex : Nat__490723111
+    };
+  stable measurements :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?BodyMeasurement__876533361]];
+      var elementIndex : Nat__490723111
+    };
+  stable memberProfiles :
+    {
+      var root : Node__46230540<UserId__158757552, MemberProfile__307885204>;
+      var size : Nat__490723111
+    };
+  stable nextBookingId : [var Nat];
+  stable nextFitnessPlanId : [var Nat];
+  stable nextMacroLogId : [var Nat];
+  stable nextMealPlanId : [var Nat];
+  stable nextMeasurementId : [var Nat];
+  stable nextRecipeGuideId : [var Nat];
+  stable nextSessionId : [var Nat];
+  stable nextTestimonialId : [var Nat];
+  stable nextTransformationId : [var Nat];
+  stable planAssignments :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?MemberPlanAssignment__292628342]];
+      var elementIndex : Nat__490723111
+    };
+  stable recipeGuides :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?RecipeGuide__126054300]];
+      var elementIndex : Nat__490723111
+    };
+  stable sessions :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?TrainingSession__215556725]];
+      var elementIndex : Nat__490723111
+    };
+  stable testimonials :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Testimonial__1017493778]];
+      var elementIndex : Nat__490723111
+    };
+  stable transformations :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Transformation__460846123]];
+      var elementIndex : Nat__490723111
+    }
+};

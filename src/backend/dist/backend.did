@@ -1,0 +1,222 @@
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = record {name: text;};
+type UserId = principal;
+type TransformationId = nat;
+type Transformation = 
+ record {
+   afterImage: ExternalBlob;
+   beforeImage: ExternalBlob;
+   clientName: text;
+   createdAt: Timestamp;
+   description: text;
+   id: TransformationId;
+ };
+type TrainingSession = 
+ record {
+   bookedCount: nat;
+   capacity: nat;
+   description: text;
+   endTime: Timestamp;
+   id: SessionId;
+   startTime: Timestamp;
+   title: text;
+ };
+type Timestamp = int;
+type TestimonialId = nat;
+type Testimonial = 
+ record {
+   clientName: text;
+   content: text;
+   createdAt: Timestamp;
+   id: TestimonialId;
+   rating: nat;
+ };
+type SessionId = nat;
+type RecipeGuideId = nat;
+type RecipeGuide = 
+ record {
+   createdAt: Timestamp;
+   description: text;
+   file: ExternalBlob;
+   filename: text;
+   goalType: GoalType;
+   id: RecipeGuideId;
+   title: text;
+ };
+type MemberProfile = 
+ record {
+   assignedMealPlanId: opt MealPlanId;
+   email: text;
+   id: UserId;
+   joinedAt: Timestamp;
+   name: text;
+ };
+type MemberPlanAssignment = 
+ record {
+   assignedAt: Timestamp;
+   expiresAt: opt Timestamp;
+   memberId: UserId;
+   planId: FitnessPlanId;
+ };
+type MeasurementId = nat;
+type MealPlanId = nat;
+type MealPlan = 
+ record {
+   carbsGrams: nat;
+   createdAt: Timestamp;
+   dailyCalories: nat;
+   description: text;
+   fatGrams: nat;
+   goalType: GoalType;
+   id: MealPlanId;
+   name: text;
+   proteinGrams: nat;
+ };
+type MacroLogId = nat;
+type MacroLog = 
+ record {
+   calories: nat;
+   carbsGrams: nat;
+   date: Timestamp;
+   fatGrams: nat;
+   id: MacroLogId;
+   loggedAt: Timestamp;
+   memberId: UserId;
+   notes: text;
+   proteinGrams: nat;
+ };
+type GoalType = 
+ variant {
+   endurance;
+   maintenance;
+   muscleGain;
+   weightLoss;
+ };
+type FitnessPlanId = nat;
+type FitnessPlan = 
+ record {
+   createdAt: Timestamp;
+   description: text;
+   durationDays: nat;
+   id: FitnessPlanId;
+   name: text;
+   price: float64;
+ };
+type ExternalBlob = blob;
+type BookingStatus = 
+ variant {
+   cancelled;
+   confirmed;
+ };
+type BookingId = nat;
+type Booking = 
+ record {
+   bookedAt: Timestamp;
+   id: BookingId;
+   memberId: UserId;
+   sessionId: SessionId;
+   status: BookingStatus;
+ };
+type BodyMeasurement = 
+ record {
+   armsCm: float64;
+   chestCm: float64;
+   date: Timestamp;
+   hipsCm: float64;
+   id: MeasurementId;
+   legsCm: float64;
+   loggedAt: Timestamp;
+   memberId: UserId;
+   notes: text;
+   waistCm: float64;
+   weightKg: float64;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initializeAccessControl: () -> ();
+  adminAssignMealPlanToMember: (memberId: UserId, mealPlanId:
+   opt MealPlanId) -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  assignMealPlanToMember: (memberId: UserId, mealPlanId: opt MealPlanId) ->
+   ();
+  assignPlanToMember: (memberId: UserId, planId: FitnessPlanId, expiresAt:
+   opt Timestamp) -> ();
+  bookSession: (sessionId: SessionId) -> (Booking);
+  cancelBooking: (bookingId: BookingId) -> ();
+  createFitnessPlan: (name: text, description: text, durationDays: nat,
+   price: float64) -> (FitnessPlan);
+  createMealPlan: (name: text, description: text, goalType: GoalType,
+   dailyCalories: nat, proteinGrams: nat, carbsGrams: nat, fatGrams: 
+   nat) -> (MealPlan);
+  createRecipeGuide: (title: text, description: text, goalType: GoalType,
+   file: ExternalBlob, filename: text) -> (RecipeGuide);
+  createSession: (title: text, description: text, startTime: Timestamp,
+   endTime: Timestamp, capacity: nat) -> (TrainingSession);
+  createTestimonial: (clientName: text, content: text, rating: nat) ->
+   (Testimonial);
+  createTransformation: (clientName: text, description: text, beforeImage:
+   ExternalBlob, afterImage: ExternalBlob) -> (Transformation);
+  deleteFitnessPlan: (id: FitnessPlanId) -> ();
+  deleteMealPlan: (id: MealPlanId) -> ();
+  deleteMeasurement: (id: MeasurementId) -> ();
+  deleteRecipeGuide: (id: RecipeGuideId) -> ();
+  deleteSession: (id: SessionId) -> ();
+  deleteTestimonial: (id: TestimonialId) -> ();
+  deleteTransformation: (id: TransformationId) -> ();
+  getAllPlanAssignments: () -> (vec MemberPlanAssignment) query;
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getFitnessPlan: (id: FitnessPlanId) -> (opt FitnessPlan) query;
+  getMealPlan: (id: MealPlanId) -> (opt MealPlan) query;
+  getMyBookings: () -> (vec Booking) query;
+  getMyMacroLogs: () -> (vec MacroLog) query;
+  getMyMealPlan: () -> (opt MealPlan) query;
+  getMyMeasurements: () -> (vec BodyMeasurement) query;
+  getMyMemberProfile: () -> (opt MemberProfile) query;
+  getMyPlans: () -> (vec MemberPlanAssignment) query;
+  getSession: (id: SessionId) -> (opt TrainingSession) query;
+  getTransformation: (id: TransformationId) -> (opt Transformation) query;
+  getUserProfile: (user: UserId) -> (opt UserProfile) query;
+  isCallerAdmin: () -> (bool) query;
+  listAllBookings: () -> (vec Booking) query;
+  listAllMembers: () -> (vec MemberProfile) query;
+  listFitnessPlans: () -> (vec FitnessPlan) query;
+  listMealPlans: () -> (vec MealPlan) query;
+  listRecipeGuides: () -> (vec RecipeGuide) query;
+  listSessions: () -> (vec TrainingSession) query;
+  listTestimonials: () -> (vec Testimonial) query;
+  listTransformations: () -> (vec Transformation) query;
+  logMacros: (date: Timestamp, calories: nat, proteinGrams: nat, carbsGrams:
+   nat, fatGrams: nat, notes: text) -> (MacroLog);
+  logMeasurement: (date: Timestamp, weightKg: float64, chestCm: float64,
+   waistCm: float64, hipsCm: float64, armsCm: float64, legsCm: float64,
+   notes: text) -> (BodyMeasurement);
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  saveMemberProfile: (name: text, email: text) -> ();
+}
